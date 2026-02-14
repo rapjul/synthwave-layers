@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synthwave Layers - Waveform to Multi-Track Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎹 Synthwave Layers</h1>
+            <p class="subtitle">Waveform to Multi-Track Generator</p>
+        </header>
+
+        <main>
+            <!-- File Upload Section -->
+            <section class="card upload-section">
+                <h2>1. Upload Audio</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="audioFile" accept=".wav,.mp3,.ogg" hidden>
+                    <label for="audioFile" class="upload-label">
+                        <span class="upload-icon">📁</span>
+                        <span class="upload-text">Click or drag audio file here</span>
+                        <span class="upload-hint">(WAV, MP3, OGG)</span>
+                    </label>
+                </div>
+                <div id="fileInfo" class="file-info hidden">
+                    <span id="fileName"></span>
+                    <span id="fileDuration"></span>
+                </div>
+            </section>
+
+            <!-- Waveform Visualization -->
+            <section class="card waveform-section">
+                <h2>2. Waveform Visualization</h2>
+                <div class="canvas-container">
+                    <canvas id="waveformCanvas"></canvas>
+                </div>
+                <div class="spectrum-container">
+                    <canvas id="spectrumCanvas"></canvas>
+                </div>
+            </section>
+
+            <!-- Analysis Results -->
+            <section class="card analysis-section">
+                <h2>3. Analysis Results</h2>
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <label>Estimated BPM:</label>
+                        <span id="estimatedBPM">--</span>
+                    </div>
+                    <div class="analysis-item">
+                        <label>Detected Key:</label>
+                        <span id="detectedKey">--</span>
+                    </div>
+                    <div class="analysis-item">
+                        <label>Energy Level:</label>
+                        <span id="energyLevel">--</span>
+                    </div>
+                    <div class="analysis-item">
+                        <label>Harmonic Content:</label>
+                        <span id="harmonicContent">--</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mood Profile Selection -->
+            <section class="card mood-section">
+                <h2>4. Select Mood Profile</h2>
+                <div class="mood-selector">
+                    <button class="mood-btn active" data-mood="darkwave">
+                        <span class="mood-icon">🌑</span>
+                        <span class="mood-name">Darkwave</span>
+                        <span class="mood-desc">Heavy sawtooth, dark distortion</span>
+                    </button>
+                    <button class="mood-btn" data-mood="outrun">
+                        <span class="mood-icon">🚗</span>
+                        <span class="mood-name">Outrun</span>
+                        <span class="mood-desc">Fast, driving, high energy</span>
+                    </button>
+                    <button class="mood-btn" data-mood="lofi">
+                        <span class="mood-icon">📼</span>
+                        <span class="mood-name">Lo-Fi</span>
+                        <span class="mood-desc">Warm, nostalgic, bitcrushed</span>
+                    </button>
+                    <button class="mood-btn" data-mood="synthpop">
+                        <span class="mood-icon">💿</span>
+                        <span class="mood-name">Synthpop</span>
+                        <span class="mood-desc">Bright, danceable, polished</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Playback Controls -->
+            <section class="card controls-section">
+                <h2>5. Playback Controls</h2>
+                <div class="playback-controls">
+                    <button id="playBtn" class="control-btn" disabled>▶ Play</button>
+                    <button id="stopBtn" class="control-btn" disabled>⏹ Stop</button>
+                    <button id="generateBtn" class="control-btn primary" disabled>⚡ Generate Tracks</button>
+                </div>
+                <div class="track-controls">
+                    <h3>Track Mute/Unmute</h3>
+                    <div class="track-toggles">
+                        <label class="track-toggle">
+                            <input type="checkbox" id="leadMute" checked>
+                            <span class="track-label">Lead</span>
+                        </label>
+                        <label class="track-toggle">
+                            <input type="checkbox" id="bassMute" checked>
+                            <span class="track-label">Bass</span>
+                        </label>
+                        <label class="track-toggle">
+                            <input type="checkbox" id="padMute" checked>
+                            <span class="track-label">Pad</span>
+                        </label>
+                        <label class="track-toggle">
+                            <input type="checkbox" id="arpMute" checked>
+                            <span class="track-label">Arp</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="bpm-control">
+                    <label for="bpmInput">BPM Override:</label>
+                    <input type="number" id="bpmInput" min="60" max="180" value="120">
+                </div>
+            </section>
+
+            <!-- MIDI Visualization -->
+            <section class="card midi-section">
+                <h2>6. Generated MIDI Notes</h2>
+                <div class="canvas-container">
+                    <canvas id="midiCanvas"></canvas>
+                </div>
+            </section>
+
+            <!-- Export Section -->
+            <section class="card export-section">
+                <h2>7. Export</h2>
+                <div class="export-controls">
+                    <button id="exportMidiBtn" class="export-btn" disabled>
+                        <span class="btn-icon">🎼</span>
+                        Export MIDI
+                    </button>
+                    <button id="exportWavBtn" class="export-btn" disabled>
+                        <span class="btn-icon">🎧</span>
+                        Export WAV
+                    </button>
+                    <button id="exportJsonBtn" class="export-btn" disabled>
+                        <span class="btn-icon">📄</span>
+                        Export JSON Config
+                    </button>
+                </div>
+            </section>
+
+            <!-- Status Messages -->
+            <section class="card status-section">
+                <h2>Status</h2>
+                <div id="statusMessages" class="status-messages">
+                    <p class="status-info">Ready to upload audio file...</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Built with Tone.js | Synthwave Layers v1.0.0</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
